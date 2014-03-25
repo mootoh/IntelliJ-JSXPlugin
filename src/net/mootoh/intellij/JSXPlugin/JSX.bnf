@@ -1,0 +1,23 @@
+{
+    parserClass="net.mootoh.intellij.JSXPlugin.parser.JSXParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="JSX"
+    psiImplClassSuffix="Impl"
+    psiPackage="net.mootoh.intellij.JSXPlugin.psi"
+    psiImplPackage="net.mootoh.intellij.JSXPlugin.psi.impl"
+
+    elementTypeHolderClass="net.mootoh.intellij.JSXPlugin.psi.JSXTypes"
+    elementTypeClass="net.mootoh.intellij.JSXPlugin.psi.JSXElementType"
+    tokenTypeClass="net.mootoh.intellij.JSXPlugin.psi.JSXTokenType"
+}
+
+jsxFile ::= item_*
+
+//private item_ ::= (importdecl|classdef|COMMENT|CRLF)
+
+private item_ ::= (importdecl|COMMENT|CRLF)
+importdecl ::= IMPORTKEY SEPARATOR MODULENAME
+
+//classdef ::= CLASSKEY CLASSNAME
