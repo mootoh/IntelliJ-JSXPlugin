@@ -25,13 +25,12 @@ import java.io.Reader;
  */
 public class JSXParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(JSXTypes.COMMENT); // FIXME
     public static final IFileElementType FILE = new IFileElementType(Language.<JSXLanguage>findInstance(JSXLanguage.class));
 
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new FlexAdapter(new JSXLexer((Reader)null));
+        return new FlexAdapter(new _JSXLexer((Reader)null));
     }
 
     @Override
@@ -53,7 +52,7 @@ public class JSXParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return COMMENTS;
+        return TokenSet.EMPTY;
     }
 
     @NotNull

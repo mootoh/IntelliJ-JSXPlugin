@@ -28,7 +28,10 @@
     <!-- Add your extensions here -->
       <fileTypeFactory implementation="net.mootoh.intellij.JSXPlugin.JSXFileTypeFactory" />
       <lang.parserDefinition language="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXParserDefinition"/>
-      <lang.syntaxHighlighterFactory key="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXSyntaxHighlighterFactory"/>
+      <gotoSymbolContributor implementation="net.mootoh.intellij.JSXPlugin.JSXSymbolContributor"/>
+      <gotoClassContributor implementation="net.mootoh.intellij.JSXPlugin.JSXClassContributor"/>
+
+      <fileBasedIndex implementation="net.mootoh.intellij.JSXPlugin.JSXClassIndex"/>
   </extensions>
 
   <application-components>
@@ -41,14 +44,6 @@
 
   <actions>
     <!-- Add your actions here -->
-      <action id="JSXHelloAction" class="JSXHelloAction" text="Say Hello">
-          <add-to-group group-id="ToolsMenu" anchor="first"/>
-          <keyboard-shortcut keymap="$default" first-keystroke="shift meta F12"/>
-      </action>
-      <action id="Search with Google" class="GoogleSearchAction" text="Search it"
-              description="Search the word with Google">
-          <add-to-group group-id="ToolsMenu" anchor="first"/>
-      </action>
   </actions>
 
 </idea-plugin>

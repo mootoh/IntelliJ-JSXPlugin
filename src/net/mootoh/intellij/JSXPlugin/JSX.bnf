@@ -1,5 +1,6 @@
 {
     parserClass="net.mootoh.intellij.JSXPlugin.parser.JSXParser"
+    parserUtilClass="net.mootoh.intellij.JSXPlugin.parser.JSXParserUtil"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -11,13 +12,43 @@
     elementTypeHolderClass="net.mootoh.intellij.JSXPlugin.psi.JSXTypes"
     elementTypeClass="net.mootoh.intellij.JSXPlugin.psi.JSXElementType"
     tokenTypeClass="net.mootoh.intellij.JSXPlugin.psi.JSXTokenType"
+
+    tokens = [
+        kclass='class'
+        kmixin='mixin'
+        pLeft='{'
+        pRight='}'
+
+        lnumber='regexp:\d+(\.\d*)?'
+        lidentifier='regexp:[A-Za-z_][a-zA-Z0-9_]+'
+        lstring='regexp:[a-zA-Z\._]+'
+//        lidentifier='regexp:[a-zA-Z0-9_]+'
+
+//        id="regexp:\w+"
+//        string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\\"|\\\'|\\)*\")"
+        cline_comment="regexp://.*"
+        cblock_comment="regexp:/\*(.|\n)*\*/"
+    ]
 }
 
-jsxFile ::= item_*
+jsxFile ::= importStatementList typeStatement *
 
-//private item_ ::= (importdecl|classdef|COMMENT|CRLF)
+importStatementList ::= importStatement *
+importStatement ::= 'import' quotedStringLiteral ';'  {pin=1}
 
-private item_ ::= (importdecl|COMMENT|CRLF)
-importdecl ::= IMPORTKEY SEPARATOR MODULENAME
+quotedStringLiteral ::= '"' lstring '"'
 
-//classdef ::= CLASSKEY CLASSNAME
+typeStatement ::= ktype classDefinition block ';'  {pin=2}
+
+classDefinition ::= lidentifier {
+  pin=4
+  methods=[
+    resolveReference
+  ]
+  implements="net.mootoh.intellij.JSXPlugin.psi.JSXClass"
+}
+
+block ::= '{' blockStatement* '}'
+blockStatement ::= lidentifier {pin=3}
+
+ktype ::= kclass | kmixin

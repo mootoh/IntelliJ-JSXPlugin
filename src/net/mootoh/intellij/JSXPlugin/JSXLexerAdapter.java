@@ -9,6 +9,6 @@ import java.io.Reader;
  */
 public class JSXLexerAdapter extends FlexAdapter {
     public JSXLexerAdapter() {
-        super(new JSXLexer((Reader)null));
+        super(new _JSXLexer((Reader)null));
     }
 }
