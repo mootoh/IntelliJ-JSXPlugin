@@ -1,48 +1,30 @@
 package net.mootoh.intellij.JSXPlugin;
 
+import com.intellij.ide.util.PsiNavigationSupport;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.IconLoader;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayUtil;
+import net.mootoh.intellij.JSXPlugin.psi.JSXClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
 
-class FakeItemPresentation implements ItemPresentation {
-    private final String name;
-
-    FakeItemPresentation(String name) {
-        this.name = name;
-    }
-
-    @Nullable
-    @Override
-    public String getPresentableText() {
-        return name;
-    }
-
-    @Nullable
-    @Override
-    public String getLocationString() {
-        return name;
-    }
-
-    @Nullable
-    @Override
-    public Icon getIcon(boolean b) {
-        return null;
-    }
-}
-
 class FakeNavigationItem implements NavigationItem {
-    final String name;
+    private static final Icon ICON = IconLoader.getIcon("/net/mootoh/intellij/JSXPlugin/icons/jsx-icon.png");
 
-    FakeNavigationItem(String name) {
+    final String name;
+    final JSXClass klass;
+
+    FakeNavigationItem(String name, JSXClass klass) {
         this.name = name;
+        this.klass = klass;
     }
 
     @Nullable
@@ -54,22 +36,44 @@ class FakeNavigationItem implements NavigationItem {
     @Nullable
     @Override
     public ItemPresentation getPresentation() {
-        return new FakeItemPresentation(name);
+        return new ItemPresentation() {
+
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                final StringBuilder result = new StringBuilder();
+                result.append(name);
+                return result.toString();
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return klass.getContainingFile().getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean b) {
+                return ICON;
+            }
+        };
     }
 
     @Override
-    public void navigate(boolean b) {
-
+    public void navigate(boolean requestFocus) {
+        final Navigatable descriptor = PsiNavigationSupport.getInstance().getDescriptor(klass);
+        if (descriptor != null) descriptor.navigate(requestFocus);
     }
 
     @Override
     public boolean canNavigate() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canNavigateToSource() {
-        return false;
+        return true;
     }
 }
 /**
@@ -86,31 +90,18 @@ public class JSXClassContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-/*
         final GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
-//        final Collection<JSXComponentName> result = JSXClassIndex.getItemsByName(name, project, scope);
-//        if (result.size() == 0) {
-//            return NavigationItem.EMPTY_NAVIGATION_ITEM_ARRAY;
-//        }
-//        return result.toArray(new NavigationItem[result.size()]);
+        final Collection<JSXClass> result = JSXClassIndex.getItemsByName(name, project, scope);
 
-        final Collection<String> result = JSXClassIndex.getNames(project);
-        String[] strs = ArrayUtil.toStringArray(result);
+        if (result.size() == 0)
+            return NavigationItem.EMPTY_NAVIGATION_ITEM_ARRAY;
 
-        NavigationItem[] ret = new NavigationItem[strs.length];
-        for (int i=0; i<ret.length; i++) {
-            ret[i] = new FakeNavigationItem(strs[i]);
-        }
-        return ret;
-        */
-        final Collection<String> result = JSXClassIndex.getNames(project);
         NavigationItem[] ret = new NavigationItem[result.size()];
 
         int i = 0;
-        for (String nm: result) {
-            ret[i++] = new FakeNavigationItem(nm);
+        for (JSXClass klass: result) {
+            ret[i++] = new FakeNavigationItem(klass.getText(), klass);
         }
         return ret;
-
     }
 }

@@ -11,6 +11,9 @@ import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import gnu.trove.THashMap;
 import gnu.trove.THashSet;
+import net.mootoh.intellij.JSXPlugin.psi.JSXClass;
+import net.mootoh.intellij.JSXPlugin.psi.JSXClassDefinition;
+import net.mootoh.intellij.JSXPlugin.psi.JSXTypeStatement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -63,22 +66,27 @@ public class JSXClassIndex extends ScalarIndexExtension<String> {
         return FileBasedIndex.getInstance().getAllKeys(JSX_CLASS_INDEX, project);
     }
 
-    public static Collection<String> getItemsByName(String name, Project project, GlobalSearchScope searchScope) {
+    public static Collection<JSXClass> getItemsByName(String name, Project project, GlobalSearchScope searchScope) {
         final Collection<VirtualFile> files = FileBasedIndex.getInstance().getContainingFiles(JSX_CLASS_INDEX, name, searchScope);
-        final Set<String> result = new THashSet<String>();
+        final Set<JSXClass> result = new THashSet<JSXClass>();
         for (VirtualFile vFile : files) {
             final PsiFile psiFile = PsiManager.getInstance(project).findFile(vFile);
             for (PsiElement root : JSXResolveUtil.findJSXRoots(psiFile)) {
-                /*
-                for (DartComponent component : DartResolveUtil.getClassDeclarations(root)) {
-                    if (name.equals(component.getName())) {
-                        result.add(component.getComponentName());
+                PsiElement[] children = root.getChildren();
+                for (PsiElement element: children) {
+                    if (element instanceof JSXTypeStatement) {
+                        for (PsiElement child: element.getChildren()) {
+                            if (child instanceof JSXClass || child instanceof JSXClassDefinition) {
+//                                if (name.equals(child.getText())) {
+                                    result.add((JSXClass) child);
+//                                }
+                            }
+                        }
                     }
                 }
-                */
             }
         }
-        return new ArrayList<String>(result);
+        return new ArrayList<JSXClass>(result);
     }
 
     private static class MyDataIndexer implements DataIndexer<String, Void, FileContent> {

@@ -1,6 +1,5 @@
 package net.mootoh.intellij.JSXPlugin;
 
-import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

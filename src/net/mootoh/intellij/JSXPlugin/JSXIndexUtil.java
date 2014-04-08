@@ -3,7 +3,6 @@ package net.mootoh.intellij.JSXPlugin;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.XmlRecursiveElementVisitor;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.indexing.FileContent;
 import net.mootoh.intellij.JSXPlugin.psi.JSXClass;
@@ -39,8 +38,9 @@ public class JSXIndexUtil {
             for (PsiElement element: children) {
                 if (element instanceof JSXTypeStatement) {
                     for (PsiElement child: element.getChildren()) {
-                        if (child instanceof  JSXClass || child instanceof JSXClassDefinition) {
+                        if (child instanceof JSXClass || child instanceof JSXClassDefinition) {
                             result.addClassName(child.getText());
+                            result.addClass(child.getText(), (JSXClass)child);
                         }
                     }
                 }

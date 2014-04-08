@@ -30,8 +30,9 @@
       <lang.parserDefinition language="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXParserDefinition"/>
       <gotoSymbolContributor implementation="net.mootoh.intellij.JSXPlugin.JSXSymbolContributor"/>
       <gotoClassContributor implementation="net.mootoh.intellij.JSXPlugin.JSXClassContributor"/>
-
       <fileBasedIndex implementation="net.mootoh.intellij.JSXPlugin.JSXClassIndex"/>
+      <!--<codeInsight.lineMarkerProvider language="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXLineMarkerProvider"/>-->
+      <!--<implicitUsageProvider implementation="net.mootoh.intellij.JSXPlugin.JSXImplicitUsageProvider"/>-->
   </extensions>
 
   <application-components>

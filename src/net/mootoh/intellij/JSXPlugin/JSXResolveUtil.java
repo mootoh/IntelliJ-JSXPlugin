@@ -2,7 +2,6 @@ package net.mootoh.intellij.JSXPlugin;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.xml.XmlFile;
 import net.mootoh.intellij.JSXPlugin.psi.JSXFile;
 
 import java.util.Collections;
