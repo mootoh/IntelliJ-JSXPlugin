@@ -33,6 +33,8 @@
       <fileBasedIndex implementation="net.mootoh.intellij.JSXPlugin.JSXClassIndex"/>
       <!--<codeInsight.lineMarkerProvider language="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXLineMarkerProvider"/>-->
       <!--<implicitUsageProvider implementation="net.mootoh.intellij.JSXPlugin.JSXImplicitUsageProvider"/>-->
+      <psi.referenceContributor implementation="net.mootoh.intellij.JSXPlugin.JSXReferenceContributor"/>
+      <lang.findUsagesProvider language="JSX" implementationClass="net.mootoh.intellij.JSXPlugin.JSXFindUsagesProvider"/>
   </extensions>
 
   <application-components>
